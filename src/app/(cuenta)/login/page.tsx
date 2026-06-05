@@ -22,7 +22,7 @@ export default async function LoginCliente({
           Para ver el historial de tus pedidos.
         </p>
         <form action={loginCliente} className="mt-6 space-y-3">
-          <input type="hidden" name="next" value={next ?? "/mis-pedidos"} />
+          <input type="hidden" name="next" value={next ?? ""} />
           <input name="email" type="email" required placeholder="Email"
             className="w-full rounded-xl border border-brdr px-4 py-3 outline-none focus:border-navy" />
           <input name="password" type="password" required placeholder="Contraseña"

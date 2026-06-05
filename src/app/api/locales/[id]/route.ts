@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getLocalById, getSlotsByLocal } from "@/lib/data";
+import { getLocalById, getSlotsByLocal, getPlatosByLocal } from "@/lib/data";
 
 export async function GET(
   _req: Request,
@@ -10,6 +10,9 @@ export async function GET(
   if (!local) {
     return NextResponse.json({ error: "Local no encontrado" }, { status: 404 });
   }
-  const slots = await getSlotsByLocal(id);
-  return NextResponse.json({ local, slots });
+  const [slots, platos] = await Promise.all([
+    getSlotsByLocal(id),
+    getPlatosByLocal(id),
+  ]);
+  return NextResponse.json({ local, slots, platos });
 }

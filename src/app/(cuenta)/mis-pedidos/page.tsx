@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getSession } from "@/lib/auth";
 import { formatARS } from "@/lib/format";
 import { EstadoBadge } from "@/components/estado-badge";
+import { PedidoEditable } from "@/components/pedido-editable";
 import { logoutCliente } from "../actions";
 import type { ItemPedido, Pedido } from "@/lib/types";
 
@@ -44,6 +45,10 @@ export default async function MisPedidos() {
       ) : (
         <div className="mt-6 space-y-3">
           {pedidos.map((p) => {
+            // Pendiente de pago -> editable (sumar/sacar platos, ir a pagar)
+            if (p.estado === "pendiente_pago") {
+              return <PedidoEditable key={p.id} pedido={p} />;
+            }
             const items = (p.items ?? []) as ItemPedido[];
             return (
               <Link
