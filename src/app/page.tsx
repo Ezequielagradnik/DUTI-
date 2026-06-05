@@ -87,18 +87,24 @@ export default function Home() {
           <HeroClock />
         </div>
 
-        {/* Marquee de categorías */}
-        <div className="relative overflow-hidden border-y border-brdr/60 bg-white/40 py-4 backdrop-blur [mask-image:linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)]">
-          <div className="flex w-max animate-marquee gap-3">
-            {[...CHIPS, ...CHIPS].map((c, i) => (
-              <span
-                key={i}
-                className="group inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-brdr bg-white px-5 py-2 text-sm font-semibold text-navy/80 shadow-sm transition hover:border-copper hover:text-copper"
-              >
-                {c}
-              </span>
-            ))}
-          </div>
+        {/* Marquee de categorías (loop infinito) */}
+        <div className="relative flex overflow-hidden border-y border-brdr/60 bg-white/40 py-4 backdrop-blur [mask-image:linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)]">
+          {[0, 1].map((g) => (
+            <ul
+              key={g}
+              aria-hidden={g === 1}
+              className="flex shrink-0 animate-marquee items-center gap-3 pr-3"
+            >
+              {CHIPS.map((c) => (
+                <li
+                  key={c}
+                  className="inline-flex items-center whitespace-nowrap rounded-full border border-brdr bg-white px-5 py-2 text-sm font-semibold text-navy/80 shadow-sm transition hover:border-copper hover:text-copper"
+                >
+                  {c}
+                </li>
+              ))}
+            </ul>
+          ))}
         </div>
       </section>
 

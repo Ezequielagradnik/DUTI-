@@ -1,4 +1,5 @@
 import { Logo } from "@/components/logo";
+import { SubmitButton } from "@/components/submit-button";
 import { login } from "./actions";
 
 export const metadata = { title: "Ingresar — Panel DUTI" };
@@ -38,12 +39,7 @@ export default async function LoginPage({
           />
           {error && <p className="text-sm text-danger">{error}</p>}
           {msg && <p className="text-sm text-success">{msg}</p>}
-          <button
-            formAction={login}
-            className="w-full rounded-full bg-navy py-3 font-semibold text-cream hover:bg-navy-700"
-          >
-            Ingresar
-          </button>
+          <SubmitButton pendingText="Ingresando…">Ingresar</SubmitButton>
         </form>
         <p className="mt-4 text-center text-xs text-muted">
           ¿Tu local todavía no está en DUTI?{" "}

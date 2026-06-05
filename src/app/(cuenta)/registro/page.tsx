@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
+import { SubmitButton } from "@/components/submit-button";
 import { registroCliente } from "../actions";
 
 export const metadata = { title: "Crear cuenta — DUTI" };
@@ -28,9 +29,7 @@ export default async function RegistroCliente({
           <input name="password" type="password" required minLength={6} placeholder="Contraseña (mín. 6)"
             className="w-full rounded-xl border border-brdr px-4 py-3 outline-none focus:border-navy" />
           {error && <p className="text-sm text-danger">{error}</p>}
-          <button className="w-full rounded-full bg-copper py-3 font-semibold text-white hover:bg-copper-light">
-            Crear cuenta
-          </button>
+          <SubmitButton variant="copper" pendingText="Creando…">Crear cuenta</SubmitButton>
         </form>
         <p className="mt-4 text-center text-sm text-muted">
           ¿Ya tenés cuenta?{" "}

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
+import { SubmitButton } from "@/components/submit-button";
 import { loginCliente } from "../actions";
 
 export const metadata = { title: "Ingresar — DUTI" };
@@ -27,9 +28,7 @@ export default async function LoginCliente({
           <input name="password" type="password" required placeholder="Contraseña"
             className="w-full rounded-xl border border-brdr px-4 py-3 outline-none focus:border-navy" />
           {error && <p className="text-sm text-danger">{error}</p>}
-          <button className="w-full rounded-full bg-navy py-3 font-semibold text-cream hover:bg-navy-700">
-            Ingresar
-          </button>
+          <SubmitButton pendingText="Ingresando…">Ingresar</SubmitButton>
         </form>
         <p className="mt-4 text-center text-sm text-muted">
           ¿No tenés cuenta?{" "}
