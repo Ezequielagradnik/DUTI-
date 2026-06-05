@@ -30,6 +30,7 @@ export function PedidosBoard({
   const [pedidos, setPedidos] = useState<Pedido[]>(inicial);
   const [comprobante, setComprobante] = useState<string | null>(null);
   const [cargandoComp, setCargandoComp] = useState(false);
+  const [motivos, setMotivos] = useState<Record<string, string>>({});
   const [, startTransition] = useTransition();
 
   // Realtime: nuevos pedidos y cambios de estado
@@ -87,12 +88,15 @@ export function PedidosBoard({
   }
 
   function marcarRevision(p: Pedido, v: EstadoRevision) {
+    const motivo = motivos[p.id] ?? p.motivo_revision ?? "";
     // Optimista
     setPedidos((prev) =>
-      prev.map((x) => (x.id === p.id ? { ...x, estado_revision: v } : x))
+      prev.map((x) =>
+        x.id === p.id ? { ...x, estado_revision: v, motivo_revision: motivo || null } : x
+      )
     );
     startTransition(() => {
-      cambiarRevision(p.id, v);
+      cambiarRevision(p.id, v, motivo || undefined);
     });
   }
 
@@ -172,23 +176,33 @@ export function PedidosBoard({
 
               {/* Revisión manual del comprobante */}
               {p.estado !== "pendiente_pago" && (
-                <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-brdr pt-3">
-                  <span className="text-xs font-medium text-muted">Revisión:</span>
-                  {REVISIONES.map((r) => {
-                    const sel = p.estado_revision === r.v;
-                    return (
-                      <button
-                        key={r.v}
-                        onClick={() => marcarRevision(p, r.v)}
-                        className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
-                          sel ? r.cls : "border-brdr text-muted hover:bg-navy-50"
-                        }`}
-                      >
-                        {sel ? "● " : ""}
-                        {r.label}
-                      </button>
-                    );
-                  })}
+                <div className="mt-3 border-t border-brdr pt-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-medium text-muted">Revisión:</span>
+                    {REVISIONES.map((r) => {
+                      const sel = p.estado_revision === r.v;
+                      return (
+                        <button
+                          key={r.v}
+                          onClick={() => marcarRevision(p, r.v)}
+                          className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                            sel ? r.cls : "border-brdr text-muted hover:bg-navy-50"
+                          }`}
+                        >
+                          {sel ? "● " : ""}
+                          {r.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <input
+                    value={motivos[p.id] ?? p.motivo_revision ?? ""}
+                    onChange={(e) =>
+                      setMotivos((m) => ({ ...m, [p.id]: e.target.value }))
+                    }
+                    placeholder="Motivo de la revisión (opcional)…"
+                    className="mt-2 w-full rounded-lg border border-brdr bg-white px-3 py-1.5 text-sm outline-none focus:border-navy"
+                  />
                 </div>
               )}
             </div>

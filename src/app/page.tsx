@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { HeroBackground } from "@/components/hero-background";
+import { HeroClock } from "@/components/hero-clock";
 
 const PASOS = [
   {
@@ -24,22 +24,32 @@ const PASOS = [
   },
 ];
 
+const CHIPS = ["🍔 Hamburguesas", "🍣 Sushi", "🥗 Saludable", "🍕 Pizza", "🍰 Postres", "☕ Café"];
+
 export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-navy-50 to-cream" />
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-20 md:grid-cols-2 md:py-28">
-          <div>
-            <span className="inline-block rounded-full bg-copper-50 px-3 py-1 text-sm font-semibold text-copper-600">
+      <section className="relative -mt-[72px] overflow-hidden pt-[72px] md:-mt-[96px] md:pt-[96px]">
+        {/* Aurora de fondo (cubre también detrás del header) */}
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(120%_90%_at_80%_-5%,#e7eef6_0%,#faf8f5_55%,#f6ece4_100%)]" />
+        <div className="animate-blob absolute -left-24 top-10 -z-10 h-80 w-80 rounded-full bg-copper/20 blur-3xl" />
+        <div className="animate-blob absolute -right-10 top-40 -z-10 h-96 w-96 rounded-full bg-navy/10 blur-3xl [animation-delay:-7s]" />
+
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 md:grid-cols-2 md:py-24">
+          {/* Texto */}
+          <div className="animate-[fadeUp_0.8s_ease-out]">
+            <span className="inline-flex items-center gap-2 rounded-full border border-copper/20 bg-white/70 px-4 py-1.5 text-sm font-semibold text-copper-600 backdrop-blur">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-copper" />
               Pedí, pagá y retirá a horario
             </span>
-            <h1 className="mt-5 text-4xl font-bold leading-tight text-navy md:text-6xl">
+            <h1 className="mt-6 text-5xl font-bold leading-[1.03] tracking-tight text-navy md:text-7xl">
               Tu comida lista{" "}
-              <span className="text-copper">justo cuando la querés.</span>
+              <span className="bg-gradient-to-r from-copper via-copper-light to-copper bg-[length:200%_auto] bg-clip-text text-transparent [animation:shine_4s_linear_infinite]">
+                justo cuando la querés.
+              </span>
             </h1>
-            <p className="mt-5 max-w-md text-lg text-muted">
+            <p className="mt-6 max-w-md text-lg text-muted">
               DUTI conecta tus locales favoritos con vos. Pagás por
               transferencia, la IA verifica el pago al toque y elegís la hora
               exacta para pasar a buscarlo.
@@ -47,30 +57,47 @@ export default function Home() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/locales"
-                className="rounded-full bg-navy px-6 py-3 font-semibold text-cream transition hover:bg-navy-700"
+                className="group rounded-full bg-navy px-7 py-3.5 font-semibold text-cream shadow-lg shadow-navy/25 transition hover:-translate-y-0.5 hover:bg-navy-700 hover:shadow-xl"
               >
                 Ver locales
+                <span className="ml-2 inline-block transition group-hover:translate-x-1">→</span>
               </Link>
               <Link
                 href="/como-funciona"
-                className="rounded-full border border-navy/20 px-6 py-3 font-semibold text-navy transition hover:bg-navy-50"
+                className="rounded-full border border-navy/15 bg-white/60 px-7 py-3.5 font-semibold text-navy backdrop-blur transition hover:bg-white"
               >
                 Cómo funciona
               </Link>
             </div>
+            <div className="mt-10 flex gap-8">
+              {[
+                ["100%", "para el local"],
+                ["~3s", "verificación"],
+                ["0", "comisión de pasarela"],
+              ].map(([n, l]) => (
+                <div key={l}>
+                  <p className="text-2xl font-bold text-navy">{n}</p>
+                  <p className="text-xs text-muted">{l}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="relative">
-            <div className="aspect-square w-full rounded-[2rem] bg-gradient-to-br from-navy to-navy-700 p-2 shadow-2xl">
-              <div className="grid h-full place-items-center rounded-[1.6rem] bg-cream">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo.svg" alt="DUTI" className="w-2/3 max-w-[260px]" />
-              </div>
-            </div>
-            <div className="absolute -bottom-4 -left-4 rounded-2xl bg-white px-4 py-3 shadow-lg ring-1 ring-brdr">
-              <p className="text-xs text-muted">Pago verificado</p>
-              <p className="text-sm font-bold text-success">✓ en segundos</p>
-            </div>
+          {/* Visual de marca: reloj animado */}
+          <HeroClock />
+        </div>
+
+        {/* Marquee de categorías */}
+        <div className="relative overflow-hidden border-y border-brdr/60 bg-white/40 py-4 backdrop-blur [mask-image:linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)]">
+          <div className="flex w-max animate-marquee gap-3">
+            {[...CHIPS, ...CHIPS].map((c, i) => (
+              <span
+                key={i}
+                className="group inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-brdr bg-white px-5 py-2 text-sm font-semibold text-navy/80 shadow-sm transition hover:border-copper hover:text-copper"
+              >
+                {c}
+              </span>
+            ))}
           </div>
         </div>
       </section>
@@ -82,9 +109,9 @@ export default function Home() {
           {PASOS.map((p) => (
             <div
               key={p.n}
-              className="rounded-card border border-brdr bg-white p-6 shadow-sm"
+              className="group rounded-card border border-brdr bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
             >
-              <div className="grid h-10 w-10 place-items-center rounded-full bg-copper text-lg font-bold text-white">
+              <div className="grid h-10 w-10 place-items-center rounded-full bg-copper text-lg font-bold text-white transition group-hover:scale-110">
                 {p.n}
               </div>
               <h3 className="mt-4 font-semibold text-navy">{p.titulo}</h3>
@@ -96,14 +123,15 @@ export default function Home() {
 
       {/* CTA */}
       <section className="mx-auto max-w-6xl px-4 pb-8">
-        <div className="rounded-[2rem] bg-navy px-8 py-14 text-center text-cream">
-          <h2 className="text-3xl font-bold">¿Listo para pedir?</h2>
-          <p className="mx-auto mt-3 max-w-md text-cream/70">
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-navy to-navy-700 px-8 py-14 text-center text-cream">
+          <div className="animate-blob absolute -right-10 -top-10 h-60 w-60 rounded-full bg-copper/30 blur-3xl" />
+          <h2 className="relative text-3xl font-bold">¿Listo para pedir?</h2>
+          <p className="relative mx-auto mt-3 max-w-md text-cream/70">
             Explorá los locales disponibles y armá tu pedido en minutos.
           </p>
           <Link
             href="/locales"
-            className="mt-7 inline-block rounded-full bg-copper px-7 py-3 font-semibold text-white transition hover:bg-copper-light"
+            className="relative mt-7 inline-block rounded-full bg-copper px-8 py-3.5 font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-copper-light"
           >
             Ver locales
           </Link>

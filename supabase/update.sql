@@ -142,3 +142,9 @@ alter table pedidos
 drop index if exists uq_pedidos_comprobante_hash;
 alter table pedidos drop column if exists comprobante_hash;
 alter table pedidos drop column if exists comprobante_url;
+
+-- ============================================================
+-- DUTI — Motivo de la revisión manual del comprobante
+-- ============================================================
+alter table pedidos
+  add column if not exists motivo_revision text;

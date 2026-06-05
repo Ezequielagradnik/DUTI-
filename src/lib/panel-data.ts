@@ -28,7 +28,7 @@ export async function getPedidosDelLocal(
   const { data, error } = await supabase
     .from("pedidos")
     .select(
-      "id, local_id, usuario_id, items, subtotal, total, horario_retiro, estado, estado_revision, verificacion, nombre_cliente, telefono_cliente, created_at"
+      "id, local_id, usuario_id, items, subtotal, total, horario_retiro, estado, estado_revision, motivo_revision, verificacion, nombre_cliente, telefono_cliente, created_at"
     )
     .eq("local_id", localId)
     .order("created_at", { ascending: false })

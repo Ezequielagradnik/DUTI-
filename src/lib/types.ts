@@ -75,6 +75,7 @@ export interface Pedido {
   horario_retiro: string;
   estado: EstadoPedido;
   estado_revision: EstadoRevision | null; // revisión manual del local/admin
+  motivo_revision: string | null; // nota/motivo de la revisión
   comprobante_base64: string | null; // imagen del comprobante (data URL)
   verificacion: unknown | null;
   nombre_cliente: string | null;

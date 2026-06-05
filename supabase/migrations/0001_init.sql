@@ -125,6 +125,7 @@ create table if not exists pedidos (
   horario_retiro    text not null,             -- "13:00"
   estado            estado_pedido not null default 'pendiente_pago',
   estado_revision   revision_estado,           -- revisión manual del local/admin
+  motivo_revision   text,                      -- nota/motivo de esa revisión
   comprobante_base64 text,                     -- imagen del comprobante en base64
   verificacion      jsonb,                     -- resultado de la IA (n8n)
   nombre_cliente    text,

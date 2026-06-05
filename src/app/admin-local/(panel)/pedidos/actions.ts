@@ -20,13 +20,14 @@ export async function cambiarEstado(pedidoId: string, estado: EstadoPedido) {
 
 export async function cambiarRevision(
   pedidoId: string,
-  estado_revision: EstadoRevision
+  estado_revision: EstadoRevision,
+  motivo_revision?: string
 ) {
   const supabase = await createClient();
   if (!supabase) return { error: "No configurado" };
   const { error } = await supabase
     .from("pedidos")
-    .update({ estado_revision })
+    .update({ estado_revision, motivo_revision: motivo_revision ?? null })
     .eq("id", pedidoId);
   if (error) return { error: error.message };
   revalidatePath("/admin-local/pedidos");
