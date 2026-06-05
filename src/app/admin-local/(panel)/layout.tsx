@@ -24,7 +24,7 @@ export default async function PanelLayout({
   const local = await getLocalDelOwner(session);
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-6 px-4 py-6 md:grid-cols-[220px_1fr]">
+    <div className="mx-auto grid max-w-6xl gap-6 px-4 pb-12 pt-10 md:grid-cols-[220px_1fr] md:pt-16">
       {/* Sidebar */}
       <aside className="h-max rounded-card border border-brdr bg-white p-4">
         <Logo />

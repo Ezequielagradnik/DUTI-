@@ -26,12 +26,12 @@ export function Header({
 
   return (
     <header className="sticky top-3 z-40 px-3 md:top-5 md:px-6">
-      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between rounded-full border border-white/60 bg-cream/70 pl-5 pr-2 shadow-lg shadow-navy/10 ring-1 ring-navy/5 backdrop-blur-xl md:h-16 md:pr-3">
+      <div className="relative mx-auto flex h-14 max-w-5xl items-center justify-between rounded-full border border-white/60 bg-cream/70 pl-5 pr-2 shadow-lg shadow-navy/10 ring-1 ring-navy/5 backdrop-blur-xl md:h-16 md:pr-3">
         <Link href="/" aria-label="DUTI inicio">
           <Logo />
         </Link>
 
-        <nav className="hidden items-center gap-6 text-sm font-medium text-navy/80 md:flex">
+        <nav className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-6 text-sm font-medium text-navy/80 md:flex">
           <Link href="/locales" className="hover:text-copper">Locales</Link>
           <Link href="/como-funciona" className="hover:text-copper">Cómo funciona</Link>
           {!panel && <Link href="/sumate" className="hover:text-copper">Sumá tu local</Link>}
