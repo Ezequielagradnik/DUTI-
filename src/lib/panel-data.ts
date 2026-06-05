@@ -70,8 +70,12 @@ export async function getTopPlatos(
 export interface ResumenPlataforma {
   ventas_total: number;
   ventas_hoy: number;
+  ventas_semana: number;
+  ventas_mes: number;
   pedidos_total: number;
   pedidos_hoy: number;
+  pedidos_semana: number;
+  pedidos_mes: number;
   locales_activos: number;
   comision_total: number;
 }

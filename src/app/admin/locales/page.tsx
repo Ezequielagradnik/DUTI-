@@ -9,9 +9,17 @@ export default async function AdminLocales() {
 
   return (
     <div>
-      <header className="mb-5">
-        <h1 className="text-2xl font-bold text-navy">Locales</h1>
-        <p className="text-sm text-muted">Ventas y comisión por local</p>
+      <header className="mb-5 flex items-end justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-navy">Locales</h1>
+          <p className="text-sm text-muted">Ventas y comisión por local</p>
+        </div>
+        <Link
+          href="/admin/locales/nuevo"
+          className="rounded-full bg-copper px-4 py-2 text-sm font-semibold text-white hover:bg-copper-light"
+        >
+          + Nuevo local
+        </Link>
       </header>
 
       <div className="grid gap-4 sm:grid-cols-2">

@@ -17,15 +17,22 @@ export default async function AdminDashboard() {
         <p className="text-sm text-muted">Toda la plataforma DUTI</p>
       </header>
 
+      {/* Ventas por período */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Stat titulo="Ventas hoy" valor={formatARS(resumen?.ventas_hoy ?? 0)} acento />
+        <Stat titulo="Esta semana" valor={formatARS(resumen?.ventas_semana ?? 0)} />
+        <Stat titulo="Este mes" valor={formatARS(resumen?.ventas_mes ?? 0)} />
         <Stat titulo="Ventas totales" valor={formatARS(resumen?.ventas_total ?? 0)} acento />
-        <Stat titulo="Ventas hoy" valor={formatARS(resumen?.ventas_hoy ?? 0)} />
-        <Stat titulo="Comisión generada" valor={formatARS(resumen?.comision_total ?? 0)} acento />
-        <Stat titulo="Locales activos" valor={String(resumen?.locales_activos ?? 0)} />
       </div>
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        <Stat titulo="Pedidos totales" valor={String(resumen?.pedidos_total ?? 0)} />
+      {/* Pedidos por período */}
+      <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Stat titulo="Pedidos hoy" valor={String(resumen?.pedidos_hoy ?? 0)} />
+        <Stat titulo="Pedidos semana" valor={String(resumen?.pedidos_semana ?? 0)} />
+        <Stat titulo="Pedidos mes" valor={String(resumen?.pedidos_mes ?? 0)} />
+        <Stat titulo="Comisión generada" valor={formatARS(resumen?.comision_total ?? 0)} acento />
+      </div>
+      <div className="mt-4">
+        <Stat titulo="Locales activos" valor={String(resumen?.locales_activos ?? 0)} />
       </div>
 
       <h2 className="mt-8 mb-3 font-semibold text-navy">Ventas por local</h2>

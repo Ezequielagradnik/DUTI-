@@ -1,5 +1,5 @@
 import { Logo } from "@/components/logo";
-import { login, registro } from "./actions";
+import { login } from "./actions";
 
 export const metadata = { title: "Ingresar — Panel DUTI" };
 
@@ -44,13 +44,14 @@ export default async function LoginPage({
           >
             Ingresar
           </button>
-          <button
-            formAction={registro}
-            className="w-full rounded-full border border-brdr py-3 text-sm font-semibold text-navy hover:bg-navy-50"
-          >
-            Crear cuenta
-          </button>
         </form>
+        <p className="mt-4 text-center text-xs text-muted">
+          ¿Tu local todavía no está en DUTI?{" "}
+          <a href="/sumate" className="font-semibold text-copper hover:underline">
+            Sumate
+          </a>{" "}
+          y te damos de alta.
+        </p>
       </div>
     </div>
   );

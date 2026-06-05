@@ -86,16 +86,7 @@ export function HeroClock() {
         <circle cx="200" cy="200" r="4" fill="#bd7b54" />
       </svg>
 
-      {/* Emojis flotando */}
-      {ORBITERS.map((o) => (
-        <span
-          key={o.emoji}
-          className={`animate-floaty absolute grid h-12 w-12 place-items-center rounded-2xl bg-white text-xl shadow-xl ring-1 ring-brdr ${o.cls}`}
-          style={{ animationDelay: o.delay }}
-        >
-          {o.emoji}
-        </span>
-      ))}
+    
     </div>
   );
 }
