@@ -37,9 +37,13 @@ export async function POST(
   }
 
   const confianza = Number(v.confianza ?? 0);
-  const montoOk =
-    v.monto_detectado != null &&
-    Math.abs(Number(v.monto_detectado) - Number(pedido.total)) < 1;
+  const total = Number(pedido.total);
+  // Desfasaje = pagado - total (negativo = pagó de menos)
+  const desfasaje =
+    v.monto_detectado != null
+      ? Math.round(Number(v.monto_detectado) - total)
+      : 0;
+  const montoOk = v.monto_detectado != null && Math.abs(desfasaje) < 1;
 
   let estado: EstadoPedido;
   if (v.es_real === true && confianza >= 80 && montoOk) {
@@ -52,7 +56,7 @@ export async function POST(
 
   const { error } = await admin
     .from("pedidos")
-    .update({ estado, verificacion: v })
+    .update({ estado, verificacion: v, desfasaje_precio: desfasaje })
     .eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 

@@ -4,6 +4,7 @@ import "./globals.css";
 import { CartProvider } from "@/lib/cart";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { getSession } from "@/lib/auth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,11 +23,12 @@ export const metadata: Metadata = {
   icons: { icon: "/icon.svg" },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getSession();
   return (
     <html
       lang="es"
@@ -34,7 +36,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-cream text-navy">
         <CartProvider>
-          <Header />
+          <Header rol={session?.rol ?? null} email={session?.email ?? null} />
           <main className="flex-1">{children}</main>
           <Footer />
         </CartProvider>

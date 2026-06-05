@@ -146,6 +146,27 @@ export function PedidosBoard({
                 </p>
               )}
 
+              {p.especificaciones && (
+                <p className="mt-2 rounded-lg bg-navy-50 px-3 py-2 text-sm text-navy">
+                  📝 <span className="font-medium">Aclaraciones:</span>{" "}
+                  {p.especificaciones}
+                </p>
+              )}
+
+              {p.desfasaje_precio !== 0 && (
+                <p
+                  className={`mt-2 rounded-lg px-3 py-2 text-sm font-semibold ${
+                    p.desfasaje_precio < 0
+                      ? "bg-red-50 text-red-700"
+                      : "bg-amber-50 text-amber-700"
+                  }`}
+                >
+                  {p.desfasaje_precio < 0
+                    ? `⚠️ Pagó ${formatARS(Math.abs(p.desfasaje_precio))} de MENOS`
+                    : `Pagó ${formatARS(p.desfasaje_precio)} de más`}
+                </p>
+              )}
+
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 {p.estado !== "pendiente_pago" && (
                   <button

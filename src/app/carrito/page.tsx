@@ -16,6 +16,7 @@ export default function CarritoPage() {
   const [slot, setSlot] = useState<string>("");
   const [nombre, setNombre] = useState("");
   const [telefono, setTelefono] = useState("");
+  const [especificaciones, setEspecificaciones] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -51,6 +52,7 @@ export default function CarritoPage() {
           horario_retiro: slot,
           nombre_cliente: nombre.trim(),
           telefono_cliente: telefono.trim() || null,
+          especificaciones: especificaciones.trim() || null,
         }),
       });
       const data = await res.json();
@@ -174,6 +176,13 @@ export default function CarritoPage() {
           onChange={(e) => setTelefono(e.target.value)}
           placeholder="Teléfono (opcional)"
           className="rounded-xl border border-brdr bg-white px-4 py-3 outline-none focus:border-navy"
+        />
+        <textarea
+          value={especificaciones}
+          onChange={(e) => setEspecificaciones(e.target.value)}
+          placeholder="Aclaraciones para el local (ej. sin cebolla, bien cocido…)"
+          rows={2}
+          className="rounded-xl border border-brdr bg-white px-4 py-3 outline-none focus:border-navy sm:col-span-2"
         />
       </div>
 

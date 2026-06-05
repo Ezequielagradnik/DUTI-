@@ -126,6 +126,8 @@ create table if not exists pedidos (
   estado            estado_pedido not null default 'pendiente_pago',
   estado_revision   revision_estado,           -- revisión manual del local/admin
   motivo_revision   text,                      -- nota/motivo de esa revisión
+  desfasaje_precio  int not null default 0,    -- pagado - total (negativo = pagó de menos)
+  especificaciones  text,                      -- aclaraciones del cliente para el local
   comprobante_base64 text,                     -- imagen del comprobante en base64
   verificacion      jsonb,                     -- resultado de la IA (n8n)
   nombre_cliente    text,

@@ -76,6 +76,8 @@ export interface Pedido {
   estado: EstadoPedido;
   estado_revision: EstadoRevision | null; // revisión manual del local/admin
   motivo_revision: string | null; // nota/motivo de la revisión
+  desfasaje_precio: number; // pagado - total (negativo = pagó de menos)
+  especificaciones: string | null; // aclaraciones del cliente para el local
   comprobante_base64: string | null; // imagen del comprobante (data URL)
   verificacion: unknown | null;
   nombre_cliente: string | null;
