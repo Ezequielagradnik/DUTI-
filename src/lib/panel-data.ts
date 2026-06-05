@@ -24,9 +24,12 @@ export async function getPedidosDelLocal(
 ): Promise<Pedido[]> {
   const supabase = await createClient();
   if (!supabase) return [];
+  // Excluimos comprobante_base64 (pesado): se trae bajo demanda al verlo.
   const { data, error } = await supabase
     .from("pedidos")
-    .select("*")
+    .select(
+      "id, local_id, usuario_id, items, subtotal, total, horario_retiro, estado, estado_revision, verificacion, nombre_cliente, telefono_cliente, created_at"
+    )
     .eq("local_id", localId)
     .order("created_at", { ascending: false })
     .limit(limit);
@@ -58,4 +61,43 @@ export async function getTopPlatos(
   });
   if (error) throw error;
   return (data ?? []) as TopPlato[];
+}
+
+// ============================================================
+// Admin (plataforma)
+// ============================================================
+
+export interface ResumenPlataforma {
+  ventas_total: number;
+  ventas_hoy: number;
+  pedidos_total: number;
+  pedidos_hoy: number;
+  locales_activos: number;
+  comision_total: number;
+}
+
+export interface VentaPorLocal {
+  local_id: string;
+  nombre: string;
+  slug: string;
+  comision_pct: number;
+  pedidos: number;
+  ventas: number;
+  comision: number;
+}
+
+export async function getResumenPlataforma(): Promise<ResumenPlataforma | null> {
+  const supabase = await createClient();
+  if (!supabase) return null;
+  const { data, error } = await supabase.rpc("resumen_plataforma");
+  if (error) throw error;
+  return data as ResumenPlataforma;
+}
+
+export async function getVentasPorLocal(): Promise<VentaPorLocal[]> {
+  const supabase = await createClient();
+  if (!supabase) return [];
+  const { data, error } = await supabase.rpc("ventas_por_local");
+  if (error) throw error;
+  return (data ?? []) as VentaPorLocal[];
 }

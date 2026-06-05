@@ -24,6 +24,10 @@ do $$ begin
   );
 exception when duplicate_object then null; end $$;
 
+do $$ begin
+  create type revision_estado as enum ('revisado', 'rechazado', 'comprobado');
+exception when duplicate_object then null; end $$;
+
 -- Utility: updated_at trigger ----------------------------------
 create or replace function set_updated_at()
 returns trigger language plpgsql as $$
@@ -120,8 +124,8 @@ create table if not exists pedidos (
   total             numeric(10,2) not null,    -- subtotal + centavos únicos por pedido
   horario_retiro    text not null,             -- "13:00"
   estado            estado_pedido not null default 'pendiente_pago',
-  comprobante_url   text,
-  comprobante_hash  text,                      -- hash de imagen, evita reusar comprobante
+  estado_revision   revision_estado,           -- revisión manual del local/admin
+  comprobante_base64 text,                     -- imagen del comprobante en base64
   verificacion      jsonb,                     -- resultado de la IA (n8n)
   nombre_cliente    text,
   telefono_cliente  text,
@@ -132,8 +136,6 @@ create index if not exists idx_pedidos_local on pedidos(local_id);
 create index if not exists idx_pedidos_usuario on pedidos(usuario_id);
 create index if not exists idx_pedidos_estado on pedidos(estado);
 create index if not exists idx_pedidos_created on pedidos(created_at desc);
-create unique index if not exists uq_pedidos_comprobante_hash
-  on pedidos(comprobante_hash) where comprobante_hash is not null;
 
 -- updated_at triggers ------------------------------------------
 drop trigger if exists trg_locales_updated on locales;

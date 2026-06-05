@@ -17,6 +17,7 @@ export function Header() {
           <Link href="/locales" className="hover:text-copper">Locales</Link>
           <Link href="/como-funciona" className="hover:text-copper">Cómo funciona</Link>
           <Link href="/sumate" className="hover:text-copper">Sumá tu local</Link>
+          <Link href="/mis-pedidos" className="hover:text-copper">Mis pedidos</Link>
         </nav>
 
         <Link

@@ -4,8 +4,14 @@ import { useEffect, useState, useTransition } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { formatARS } from "@/lib/format";
 import { EstadoBadge } from "./estado-badge";
-import { cambiarEstado } from "@/app/admin-local/(panel)/pedidos/actions";
-import type { EstadoPedido, ItemPedido, Pedido } from "@/lib/types";
+import { cambiarEstado, cambiarRevision } from "@/app/admin-local/(panel)/pedidos/actions";
+import type { EstadoPedido, EstadoRevision, ItemPedido, Pedido } from "@/lib/types";
+
+const REVISIONES: { v: EstadoRevision; label: string; cls: string }[] = [
+  { v: "comprobado", label: "Comprobado", cls: "bg-green-50 text-green-700 border-green-200" },
+  { v: "revisado", label: "Revisado", cls: "bg-blue-50 text-blue-700 border-blue-200" },
+  { v: "rechazado", label: "Rechazado", cls: "bg-red-50 text-red-700 border-red-200" },
+];
 
 const SIGUIENTE: Partial<Record<EstadoPedido, { a: EstadoPedido; label: string }>> = {
   confirmado: { a: "en_preparacion", label: "Marchar" },
@@ -59,7 +65,7 @@ export function PedidosBoard({
     try {
       const r = await fetch(`/api/admin/comprobante/${pedidoId}`);
       const d = await r.json();
-      if (d.url) setComprobante(d.url);
+      if (d.base64) setComprobante(d.base64);
       else alert(d.error ?? "No se pudo abrir el comprobante");
     } finally {
       setCargandoComp(false);
@@ -77,6 +83,16 @@ export function PedidosBoard({
   function rechazar(p: Pedido) {
     startTransition(() => {
       cambiarEstado(p.id, "rechazado");
+    });
+  }
+
+  function marcarRevision(p: Pedido, v: EstadoRevision) {
+    // Optimista
+    setPedidos((prev) =>
+      prev.map((x) => (x.id === p.id ? { ...x, estado_revision: v } : x))
+    );
+    startTransition(() => {
+      cambiarRevision(p.id, v);
     });
   }
 
@@ -127,7 +143,7 @@ export function PedidosBoard({
               )}
 
               <div className="mt-3 flex flex-wrap items-center gap-2">
-                {p.comprobante_url && (
+                {p.estado !== "pendiente_pago" && (
                   <button
                     onClick={() => verComprobante(p.id)}
                     disabled={cargandoComp}
@@ -153,6 +169,28 @@ export function PedidosBoard({
                   </button>
                 )}
               </div>
+
+              {/* Revisión manual del comprobante */}
+              {p.estado !== "pendiente_pago" && (
+                <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-brdr pt-3">
+                  <span className="text-xs font-medium text-muted">Revisión:</span>
+                  {REVISIONES.map((r) => {
+                    const sel = p.estado_revision === r.v;
+                    return (
+                      <button
+                        key={r.v}
+                        onClick={() => marcarRevision(p, r.v)}
+                        className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                          sel ? r.cls : "border-brdr text-muted hover:bg-navy-50"
+                        }`}
+                      >
+                        {sel ? "● " : ""}
+                        {r.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           );
         })}

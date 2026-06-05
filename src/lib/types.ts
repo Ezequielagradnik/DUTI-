@@ -23,6 +23,8 @@ export interface Local {
   activo: boolean;
   horario_apertura: string | null; // "09:00"
   horario_cierre: string | null; // "23:00"
+  comision_pct: number; // platform commission %
+  owner_id: string | null;
 }
 
 export interface Plato {
@@ -54,6 +56,8 @@ export type EstadoPedido =
   | "listo"
   | "retirado";
 
+export type EstadoRevision = "revisado" | "rechazado" | "comprobado";
+
 export interface ItemPedido {
   plato_id: string;
   nombre: string;
@@ -70,10 +74,12 @@ export interface Pedido {
   total: number; // total con centavos únicos
   horario_retiro: string;
   estado: EstadoPedido;
-  comprobante_url: string | null;
+  estado_revision: EstadoRevision | null; // revisión manual del local/admin
+  comprobante_base64: string | null; // imagen del comprobante (data URL)
+  verificacion: unknown | null;
   nombre_cliente: string | null;
   telefono_cliente: string | null;
-  creado_en: string;
+  created_at: string;
 }
 
 // Item del carrito en localStorage

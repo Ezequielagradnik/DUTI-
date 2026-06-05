@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 import { totalConCentavosUnicos } from "@/lib/format";
 
 interface ItemIn {
@@ -57,9 +58,20 @@ export async function POST(req: Request) {
   const id = crypto.randomUUID();
   const total = totalConCentavosUnicos(subtotal, id);
 
+  // Si el usuario está logueado, asociamos el pedido a su cuenta.
+  let usuarioId: string | null = null;
+  const sb = await createClient();
+  if (sb) {
+    const {
+      data: { user },
+    } = await sb.auth.getUser();
+    usuarioId = user?.id ?? null;
+  }
+
   const { error: insErr } = await admin.from("pedidos").insert({
     id,
     local_id,
+    usuario_id: usuarioId,
     items: lineItems,
     subtotal,
     total,
