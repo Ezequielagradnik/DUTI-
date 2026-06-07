@@ -139,9 +139,10 @@ export function PedidosBoard({
                 ))}
               </div>
 
-              {(p.nombre_cliente || p.telefono_cliente) && (
+              {(p.alias_cliente || p.nombre_cliente || p.telefono_cliente) && (
                 <p className="mt-2 text-xs text-muted">
-                  {p.nombre_cliente}
+                  {p.alias_cliente && <span className="font-mono">alias: {p.alias_cliente}</span>}
+                  {p.nombre_cliente ? ` · ${p.nombre_cliente}` : ""}
                   {p.telefono_cliente ? ` · ${p.telefono_cliente}` : ""}
                 </p>
               )}

@@ -84,6 +84,7 @@ export interface Pedido {
   verificacion: unknown | null;
   nombre_cliente: string | null;
   telefono_cliente: string | null;
+  alias_cliente: string | null; // alias desde el que transfiere
   created_at: string;
 }
 

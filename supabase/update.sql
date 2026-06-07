@@ -257,3 +257,11 @@ update locales set zona = 'Belgrano', rango_precio = 3 where slug = 'sakura-sush
 update locales set zona = 'Palermo',  rango_precio = 2 where slug = 'verde-bowl';
 update locales set zona = 'Caballito', rango_precio = 2 where slug = 'napoli-pizza';
 
+-- ============================================================
+-- DUTI — Alias del cliente (el que usa para transferir)
+-- Permite comparar el alias de ORIGEN del comprobante contra
+-- lo que declaró el cliente (más confiable que el nombre).
+-- ============================================================
+alter table pedidos
+  add column if not exists alias_cliente text;
+

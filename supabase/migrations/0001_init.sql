@@ -134,6 +134,7 @@ create table if not exists pedidos (
   verificacion      jsonb,                     -- resultado de la IA (n8n)
   nombre_cliente    text,
   telefono_cliente  text,
+  alias_cliente     text,                      -- alias desde el que transfiere el cliente
   created_at        timestamptz not null default now(),
   updated_at        timestamptz not null default now()
 );

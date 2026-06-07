@@ -14,7 +14,7 @@ export default function CarritoPage() {
   const [local, setLocal] = useState<Local | null>(null);
   const [slots, setSlots] = useState<Slot[]>([]);
   const [slot, setSlot] = useState<string>("");
-  const [nombre, setNombre] = useState("");
+  const [alias, setAlias] = useState("");
   const [telefono, setTelefono] = useState("");
   const [especificaciones, setEspecificaciones] = useState("");
   const [loading, setLoading] = useState(false);
@@ -34,7 +34,7 @@ export default function CarritoPage() {
   async function pagar() {
     setError(null);
     if (!slot) return setError("Elegí un horario de retiro.");
-    if (!nombre.trim()) return setError("Ingresá tu nombre.");
+    if (!alias.trim()) return setError("Ingresá el alias desde el que vas a transferir.");
     setLoading(true);
     try {
       const res = await fetch("/api/pedidos", {
@@ -50,7 +50,7 @@ export default function CarritoPage() {
           })),
           subtotal,
           horario_retiro: slot,
-          nombre_cliente: nombre.trim(),
+          alias_cliente: alias.trim(),
           telefono_cliente: telefono.trim() || null,
           especificaciones: especificaciones.trim() || null,
         }),
@@ -166,9 +166,9 @@ export default function CarritoPage() {
       {/* Datos */}
       <div className="mt-8 grid gap-3 sm:grid-cols-2">
         <input
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          placeholder="Tu nombre *"
+          value={alias}
+          onChange={(e) => setAlias(e.target.value)}
+          placeholder="Tu alias de MP (desde donde transferís) *"
           className="rounded-xl border border-brdr bg-white px-4 py-3 outline-none focus:border-navy"
         />
         <input

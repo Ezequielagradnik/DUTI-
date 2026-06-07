@@ -134,6 +134,7 @@ create table if not exists pedidos (
   verificacion      jsonb,                     -- resultado de la IA (n8n)
   nombre_cliente    text,
   telefono_cliente  text,
+  alias_cliente     text,                      -- alias desde el que transfiere el cliente
   created_at        timestamptz not null default now(),
   updated_at        timestamptz not null default now()
 );
@@ -604,6 +605,13 @@ update locales set zona = 'Palermo',  rango_precio = 2 where slug = 'burger-club
 update locales set zona = 'Belgrano', rango_precio = 3 where slug = 'sakura-sushi';
 update locales set zona = 'Palermo',  rango_precio = 2 where slug = 'verde-bowl';
 update locales set zona = 'Caballito', rango_precio = 2 where slug = 'napoli-pizza';
+-- ============================================================
+-- DUTI — Alias del cliente (el que usa para transferir)
+-- Permite comparar el alias de ORIGEN del comprobante contra
+-- lo que declaró el cliente (más confiable que el nombre).
+-- ============================================================
+alter table pedidos
+  add column if not exists alias_cliente text;
 -- ============================================================
 -- DUTI — Seed data (locales y platos de demo)
 -- Idempotente: se puede correr varias veces.
