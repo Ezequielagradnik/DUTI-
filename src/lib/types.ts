@@ -18,6 +18,8 @@ export interface Local {
   portada_url: string | null;
   descripcion: string | null;
   categoria: Categoria;
+  zona: string | null;
+  rango_precio: number; // 1=$, 2=$$, 3=$$$
   tiempo_estimado_min: number; // estimated prep time
   alias_cobro: string | null; // CBU/alias for transfers
   activo: boolean;
@@ -74,7 +76,7 @@ export interface Pedido {
   total: number; // total con centavos únicos
   horario_retiro: string;
   estado: EstadoPedido;
-  estado_revision: EstadoRevision | null; // revisión manual del local/admin
+  estado_revision: string | null; // revisión (IA n8n o local): aprobado/revisar/comprobado/revisado/rechazado
   motivo_revision: string | null; // nota/motivo de la revisión
   desfasaje_precio: number; // pagado - total (negativo = pagó de menos)
   especificaciones: string | null; // aclaraciones del cliente para el local

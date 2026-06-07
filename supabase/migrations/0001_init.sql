@@ -60,6 +60,8 @@ create table if not exists locales (
   portada_url         text,
   descripcion         text,
   categoria           text not null default 'Otros',
+  zona                text,
+  rango_precio        smallint not null default 2,  -- 1=$, 2=$$, 3=$$$
   tiempo_estimado_min int  not null default 20,
   alias_cobro         text,
   activo              boolean not null default true,

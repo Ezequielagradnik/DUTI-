@@ -201,3 +201,59 @@ $$;
 alter table pedidos
   add column if not exists desfasaje_precio int not null default 0,
   add column if not exists especificaciones text;
+
+-- ============================================================
+-- DUTI — Registro de nº de operación (dedup de comprobantes para n8n)
+-- ============================================================
+create table if not exists operaciones (
+  numero      text primary key,          -- nº de operación extraído del comprobante por la IA
+  pedido_id   uuid references pedidos(id) on delete set null,
+  created_at  timestamptz not null default now()
+);
+
+-- Cerrada al cliente: solo la usa n8n / el server con service_role (bypassa RLS).
+alter table operaciones enable row level security;
+
+-- ============================================================
+-- DUTI — estado_revision como texto libre + sync automático del estado
+-- ============================================================
+
+-- 1) estado_revision pasa a texto (n8n usa su propio vocabulario: aprobado/revisar)
+alter table pedidos
+  alter column estado_revision type text using estado_revision::text;
+
+-- 2) Trigger: deriva el `estado` (ciclo del pedido) según la revisión.
+--    Así n8n solo escribe estado_revision y el pedido se confirma/marca solo.
+create or replace function sync_estado_por_revision()
+returns trigger language plpgsql as $$
+begin
+  if new.estado_revision is distinct from old.estado_revision
+     and new.estado_revision is not null then
+    case lower(new.estado_revision)
+      when 'aprobado'   then new.estado := 'confirmado';
+      when 'comprobado' then new.estado := 'confirmado';
+      when 'revisar'    then new.estado := 'sospechoso';
+      when 'rechazado'  then new.estado := 'rechazado';
+      else null; -- 'revisado' u otros: no cambia el estado
+    end case;
+  end if;
+  return new;
+end; $$;
+
+drop trigger if exists trg_sync_estado_revision on pedidos;
+create trigger trg_sync_estado_revision before update on pedidos
+  for each row execute function sync_estado_por_revision();
+
+-- ============================================================
+-- DUTI — Zona y rango de precio en locales (para filtros)
+-- ============================================================
+alter table locales
+  add column if not exists zona text,
+  add column if not exists rango_precio smallint not null default 2; -- 1=$, 2=$$, 3=$$$
+
+-- Datos de los locales demo
+update locales set zona = 'Palermo',  rango_precio = 2 where slug = 'burger-club';
+update locales set zona = 'Belgrano', rango_precio = 3 where slug = 'sakura-sushi';
+update locales set zona = 'Palermo',  rango_precio = 2 where slug = 'verde-bowl';
+update locales set zona = 'Caballito', rango_precio = 2 where slug = 'napoli-pizza';
+

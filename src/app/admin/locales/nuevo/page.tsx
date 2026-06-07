@@ -84,6 +84,17 @@ export default function NuevoLocal() {
             </label>
             <Field label="Tiempo estimado (min)" name="tiempo_estimado_min" type="number" defaultValue="20" />
           </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Zona" name="zona" placeholder="Palermo" />
+            <label className="block">
+              <span className="mb-1 block text-sm font-medium text-navy">Rango de precio</span>
+              <select name="rango_precio" defaultValue="2" className="w-full rounded-xl border border-brdr bg-white px-3 py-2.5 outline-none focus:border-navy">
+                <option value="1">$ (económico)</option>
+                <option value="2">$$ (medio)</option>
+                <option value="3">$$$ (premium)</option>
+              </select>
+            </label>
+          </div>
           <Field label="Descripción" name="descripcion" placeholder="Smash burgers y papas rústicas." />
           <div className="grid grid-cols-2 gap-3">
             <Field label="Alias de cobro" name="alias_cobro" placeholder="burger.club.mp" />

@@ -42,10 +42,11 @@ const PASOS = [
 
 export default function ComoFunciona() {
   return (
-    <div className="overflow-hidden">
+    <div className="relative -mt-[72px] overflow-hidden pt-[72px] md:-mt-[96px] md:pt-[96px]">
+      {/* Degradé celeste que cubre también detrás del header */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[560px] bg-[radial-gradient(100%_70%_at_50%_0%,#e7eef6_0%,#faf8f5_70%,transparent_100%)]" />
       {/* Hero */}
-      <section className="relative px-4 py-20 text-center">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(100%_80%_at_50%_0%,#eaf0f6,transparent)]" />
+      <section className="relative px-4 pb-16 pt-16 text-center md:pt-20">
         <span className="inline-flex items-center gap-2 rounded-full border border-copper/20 bg-white/70 px-4 py-1.5 text-sm font-semibold text-copper-600 backdrop-blur">
           Simple de verdad
         </span>

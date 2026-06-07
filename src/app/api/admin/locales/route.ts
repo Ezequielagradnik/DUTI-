@@ -26,6 +26,8 @@ export async function POST(req: Request) {
   const {
     nombre,
     categoria,
+    zona,
+    rango_precio,
     descripcion,
     alias_cobro,
     tiempo_estimado_min,
@@ -57,6 +59,8 @@ export async function POST(req: Request) {
       nombre,
       slug,
       categoria: categoria || "Otros",
+      zona: zona || null,
+      rango_precio: Number(rango_precio) || 2,
       descripcion: descripcion || null,
       alias_cobro: alias_cobro || null,
       tiempo_estimado_min: Number(tiempo_estimado_min) || 20,

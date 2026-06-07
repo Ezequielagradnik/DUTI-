@@ -34,7 +34,7 @@ export function Header({
         <nav className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-6 text-sm font-medium text-navy/80 md:flex">
           <Link href="/locales" className="hover:text-copper">Locales</Link>
           <Link href="/como-funciona" className="hover:text-copper">Cómo funciona</Link>
-          {!panel && <Link href="/sumate" className="hover:text-copper">Sumá tu local</Link>}
+          <Link href="/sumate" className="hover:text-copper">Sumá tu local</Link>
           {panel && (
             <Link href={panel.href} className="font-semibold text-copper hover:underline">
               {panel.label}

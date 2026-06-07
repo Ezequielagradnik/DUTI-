@@ -60,6 +60,8 @@ create table if not exists locales (
   portada_url         text,
   descripcion         text,
   categoria           text not null default 'Otros',
+  zona                text,
+  rango_precio        smallint not null default 2,  -- 1=$, 2=$$, 3=$$$
   tiempo_estimado_min int  not null default 20,
   alias_cobro         text,
   activo              boolean not null default true,
@@ -551,19 +553,72 @@ alter table pedidos
   add column if not exists desfasaje_precio int not null default 0,
   add column if not exists especificaciones text;
 -- ============================================================
+-- DUTI — Registro de nº de operación (dedup de comprobantes para n8n)
+-- ============================================================
+create table if not exists operaciones (
+  numero      text primary key,          -- nº de operación extraído del comprobante por la IA
+  pedido_id   uuid references pedidos(id) on delete set null,
+  created_at  timestamptz not null default now()
+);
+
+-- Cerrada al cliente: solo la usa n8n / el server con service_role (bypassa RLS).
+alter table operaciones enable row level security;
+-- ============================================================
+-- DUTI — estado_revision como texto libre + sync automático del estado
+-- ============================================================
+
+-- 1) estado_revision pasa a texto (n8n usa su propio vocabulario: aprobado/revisar)
+alter table pedidos
+  alter column estado_revision type text using estado_revision::text;
+
+-- 2) Trigger: deriva el `estado` (ciclo del pedido) según la revisión.
+--    Así n8n solo escribe estado_revision y el pedido se confirma/marca solo.
+create or replace function sync_estado_por_revision()
+returns trigger language plpgsql as $$
+begin
+  if new.estado_revision is distinct from old.estado_revision
+     and new.estado_revision is not null then
+    case lower(new.estado_revision)
+      when 'aprobado'   then new.estado := 'confirmado';
+      when 'comprobado' then new.estado := 'confirmado';
+      when 'revisar'    then new.estado := 'sospechoso';
+      when 'rechazado'  then new.estado := 'rechazado';
+      else null; -- 'revisado' u otros: no cambia el estado
+    end case;
+  end if;
+  return new;
+end; $$;
+
+drop trigger if exists trg_sync_estado_revision on pedidos;
+create trigger trg_sync_estado_revision before update on pedidos
+  for each row execute function sync_estado_por_revision();
+-- ============================================================
+-- DUTI — Zona y rango de precio en locales (para filtros)
+-- ============================================================
+alter table locales
+  add column if not exists zona text,
+  add column if not exists rango_precio smallint not null default 2; -- 1=$, 2=$$, 3=$$$
+
+-- Datos de los locales demo
+update locales set zona = 'Palermo',  rango_precio = 2 where slug = 'burger-club';
+update locales set zona = 'Belgrano', rango_precio = 3 where slug = 'sakura-sushi';
+update locales set zona = 'Palermo',  rango_precio = 2 where slug = 'verde-bowl';
+update locales set zona = 'Caballito', rango_precio = 2 where slug = 'napoli-pizza';
+-- ============================================================
 -- DUTI — Seed data (locales y platos de demo)
 -- Idempotente: se puede correr varias veces.
 -- ============================================================
 
-insert into locales (id, nombre, slug, portada_url, descripcion, categoria, tiempo_estimado_min, alias_cobro, activo, horario_apertura, horario_cierre)
+insert into locales (id, nombre, slug, portada_url, descripcion, categoria, zona, rango_precio, tiempo_estimado_min, alias_cobro, activo, horario_apertura, horario_cierre)
 values
-  ('11111111-1111-1111-1111-111111111111', 'Burger Club',  'burger-club',  'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1200&q=80', 'Smash burgers, papas rústicas y cerveza artesanal.', 'Hamburguesas', 20, 'burger.club.mp',  true, '11:00', '23:30'),
-  ('22222222-2222-2222-2222-222222222222', 'Sakura Sushi', 'sakura-sushi', 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=1200&q=80', 'Rolls, niguiris y combinados frescos del día.',       'Sushi',        30, 'sakura.sushi.ar', true, '12:00', '23:00'),
-  ('33333333-3333-3333-3333-333333333333', 'Verde Bowl',   'verde-bowl',   'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1200&q=80', 'Bowls, ensaladas y jugos prensados en frío.',        'Saludable',    15, 'verde.bowl',      true, '09:00', '20:00'),
-  ('44444444-4444-4444-4444-444444444444', 'Nápoli Pizza', 'napoli-pizza', 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1200&q=80', 'Pizza a la piedra, masa madre, horno de leña.',      'Pizza',        25, 'napoli.pizza.mp', true, '19:00', '23:59')
+  ('11111111-1111-1111-1111-111111111111', 'Burger Club',  'burger-club',  'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1200&q=80', 'Smash burgers, papas rústicas y cerveza artesanal.', 'Hamburguesas', 'Palermo',  2, 20, 'burger.club.mp',  true, '11:00', '23:30'),
+  ('22222222-2222-2222-2222-222222222222', 'Sakura Sushi', 'sakura-sushi', 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=1200&q=80', 'Rolls, niguiris y combinados frescos del día.',       'Sushi',        'Belgrano', 3, 30, 'sakura.sushi.ar', true, '12:00', '23:00'),
+  ('33333333-3333-3333-3333-333333333333', 'Verde Bowl',   'verde-bowl',   'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1200&q=80', 'Bowls, ensaladas y jugos prensados en frío.',        'Saludable',    'Palermo',  2, 15, 'verde.bowl',      true, '09:00', '20:00'),
+  ('44444444-4444-4444-4444-444444444444', 'Nápoli Pizza', 'napoli-pizza', 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1200&q=80', 'Pizza a la piedra, masa madre, horno de leña.',      'Pizza',        'Caballito', 2, 25, 'napoli.pizza.mp', true, '19:00', '23:59')
 on conflict (id) do update set
   nombre = excluded.nombre, portada_url = excluded.portada_url, descripcion = excluded.descripcion,
-  categoria = excluded.categoria, tiempo_estimado_min = excluded.tiempo_estimado_min, alias_cobro = excluded.alias_cobro;
+  categoria = excluded.categoria, zona = excluded.zona, rango_precio = excluded.rango_precio,
+  tiempo_estimado_min = excluded.tiempo_estimado_min, alias_cobro = excluded.alias_cobro;
 
 insert into platos (id, local_id, nombre, descripcion, precio, foto_url, categoria, disponible) values
   ('a1000000-0000-0000-0000-000000000001', '11111111-1111-1111-1111-111111111111', 'Smash Doble',          'Dos medallones, cheddar, cebolla caramelizada y salsa de la casa.', 8900, 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=800&q=80', 'Hamburguesas',   true),

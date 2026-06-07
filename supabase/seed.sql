@@ -3,15 +3,16 @@
 -- Idempotente: se puede correr varias veces.
 -- ============================================================
 
-insert into locales (id, nombre, slug, portada_url, descripcion, categoria, tiempo_estimado_min, alias_cobro, activo, horario_apertura, horario_cierre)
+insert into locales (id, nombre, slug, portada_url, descripcion, categoria, zona, rango_precio, tiempo_estimado_min, alias_cobro, activo, horario_apertura, horario_cierre)
 values
-  ('11111111-1111-1111-1111-111111111111', 'Burger Club',  'burger-club',  'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1200&q=80', 'Smash burgers, papas rústicas y cerveza artesanal.', 'Hamburguesas', 20, 'burger.club.mp',  true, '11:00', '23:30'),
-  ('22222222-2222-2222-2222-222222222222', 'Sakura Sushi', 'sakura-sushi', 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=1200&q=80', 'Rolls, niguiris y combinados frescos del día.',       'Sushi',        30, 'sakura.sushi.ar', true, '12:00', '23:00'),
-  ('33333333-3333-3333-3333-333333333333', 'Verde Bowl',   'verde-bowl',   'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1200&q=80', 'Bowls, ensaladas y jugos prensados en frío.',        'Saludable',    15, 'verde.bowl',      true, '09:00', '20:00'),
-  ('44444444-4444-4444-4444-444444444444', 'Nápoli Pizza', 'napoli-pizza', 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1200&q=80', 'Pizza a la piedra, masa madre, horno de leña.',      'Pizza',        25, 'napoli.pizza.mp', true, '19:00', '23:59')
+  ('11111111-1111-1111-1111-111111111111', 'Burger Club',  'burger-club',  'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1200&q=80', 'Smash burgers, papas rústicas y cerveza artesanal.', 'Hamburguesas', 'Palermo',  2, 20, 'burger.club.mp',  true, '11:00', '23:30'),
+  ('22222222-2222-2222-2222-222222222222', 'Sakura Sushi', 'sakura-sushi', 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=1200&q=80', 'Rolls, niguiris y combinados frescos del día.',       'Sushi',        'Belgrano', 3, 30, 'sakura.sushi.ar', true, '12:00', '23:00'),
+  ('33333333-3333-3333-3333-333333333333', 'Verde Bowl',   'verde-bowl',   'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1200&q=80', 'Bowls, ensaladas y jugos prensados en frío.',        'Saludable',    'Palermo',  2, 15, 'verde.bowl',      true, '09:00', '20:00'),
+  ('44444444-4444-4444-4444-444444444444', 'Nápoli Pizza', 'napoli-pizza', 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1200&q=80', 'Pizza a la piedra, masa madre, horno de leña.',      'Pizza',        'Caballito', 2, 25, 'napoli.pizza.mp', true, '19:00', '23:59')
 on conflict (id) do update set
   nombre = excluded.nombre, portada_url = excluded.portada_url, descripcion = excluded.descripcion,
-  categoria = excluded.categoria, tiempo_estimado_min = excluded.tiempo_estimado_min, alias_cobro = excluded.alias_cobro;
+  categoria = excluded.categoria, zona = excluded.zona, rango_precio = excluded.rango_precio,
+  tiempo_estimado_min = excluded.tiempo_estimado_min, alias_cobro = excluded.alias_cobro;
 
 insert into platos (id, local_id, nombre, descripcion, precio, foto_url, categoria, disponible) values
   ('a1000000-0000-0000-0000-000000000001', '11111111-1111-1111-1111-111111111111', 'Smash Doble',          'Dos medallones, cheddar, cebolla caramelizada y salsa de la casa.', 8900, 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=800&q=80', 'Hamburguesas',   true),
