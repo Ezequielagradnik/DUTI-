@@ -49,7 +49,7 @@ export function Diferencial() {
   }, [run]);
 
   return (
-    <section className="bg-gradient-to-b from-transparent to-success/[0.06]">
+    <section className="bg-gradient-to-b from-transparent via-success/[0.06] to-transparent">
       <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 py-20 md:grid-cols-2">
         {/* Comprobante */}
         <div
