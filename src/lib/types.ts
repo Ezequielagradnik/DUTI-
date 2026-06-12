@@ -19,6 +19,8 @@ export interface Local {
   descripcion: string | null;
   categoria: Categoria;
   zona: string | null;
+  direccion: string | null;
+  instagram: string | null; // handle sin @
   rango_precio: number; // 1=$, 2=$$, 3=$$$
   tiempo_estimado_min: number; // estimated prep time
   alias_cobro: string | null; // CBU/alias for transfers

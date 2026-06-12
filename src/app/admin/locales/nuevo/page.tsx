@@ -95,6 +95,10 @@ export default function NuevoLocal() {
               </select>
             </label>
           </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Dirección" name="direccion" placeholder="Av. Santa Fe 3421" />
+            <Field label="Instagram (sin @)" name="instagram" placeholder="burgerclub.ba" />
+          </div>
           <Field label="Descripción" name="descripcion" placeholder="Smash burgers y papas rústicas." />
           <div className="grid grid-cols-2 gap-3">
             <Field label="Alias de cobro" name="alias_cobro" placeholder="burger.club.mp" />

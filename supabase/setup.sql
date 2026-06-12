@@ -61,6 +61,8 @@ create table if not exists locales (
   descripcion         text,
   categoria           text not null default 'Otros',
   zona                text,
+  direccion           text,
+  instagram           text,                        -- handle sin @
   rango_precio        smallint not null default 2,  -- 1=$, 2=$$, 3=$$$
   tiempo_estimado_min int  not null default 20,
   alias_cobro         text,
@@ -618,6 +620,12 @@ alter table pedidos
 -- ============================================================
 alter table pedidos
   add column if not exists email_cliente text;
+-- ============================================================
+-- DUTI — Dirección e Instagram del local
+-- ============================================================
+alter table locales
+  add column if not exists direccion text,
+  add column if not exists instagram text;  -- handle sin @ (ej: "burgerclub.ba")
 -- ============================================================
 -- DUTI — Seed data (locales y platos de demo)
 -- Idempotente: se puede correr varias veces.

@@ -46,13 +46,24 @@ export default async function LocalPage({
             <p className="mt-1 max-w-xl text-sm text-white/80">
               {local.descripcion}
             </p>
-            <div className="mt-2 flex gap-4 text-xs text-white/70">
+            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-white/70">
               <span>🕒 {local.tiempo_estimado_min} min</span>
               {local.horario_apertura && local.horario_cierre && (
                 <span>
                   Abierto {local.horario_apertura.slice(0, 5)}–
                   {local.horario_cierre.slice(0, 5)}
                 </span>
+              )}
+              {local.direccion && <span>📍 {local.direccion}</span>}
+              {local.instagram && (
+                <a
+                  href={`https://instagram.com/${local.instagram.replace(/^@/, "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-white/90 transition hover:text-copper-light"
+                >
+                  ◎ @{local.instagram.replace(/^@/, "")}
+                </a>
               )}
             </div>
           </div>
