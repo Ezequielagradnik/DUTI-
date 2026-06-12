@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { SubmitButton } from "@/components/submit-button";
+import { GoogleButton } from "@/components/google-button";
 import { registroCliente } from "../actions";
 
 export const metadata = { title: "Crear cuenta — DUTI" };
@@ -31,6 +32,11 @@ export default async function RegistroCliente({
           {error && <p className="text-sm text-danger">{error}</p>}
           <SubmitButton variant="copper" pendingText="Creando…">Crear cuenta</SubmitButton>
         </form>
+
+        <div className="my-4 flex items-center gap-3 text-xs text-muted">
+          <span className="h-px flex-1 bg-brdr" /> o <span className="h-px flex-1 bg-brdr" />
+        </div>
+        <GoogleButton />
         <p className="mt-4 text-center text-sm text-muted">
           ¿Ya tenés cuenta?{" "}
           <Link href="/login" className="font-semibold text-copper hover:underline">
