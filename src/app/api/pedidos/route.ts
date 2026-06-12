@@ -16,6 +16,7 @@ export async function POST(req: Request) {
     nombre_cliente?: string;
     telefono_cliente?: string | null;
     alias_cliente?: string | null;
+    email_cliente?: string | null;
     especificaciones?: string | null;
   };
   try {
@@ -24,7 +25,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "JSON inválido" }, { status: 400 });
   }
 
-  const { local_id, items, horario_retiro, nombre_cliente, telefono_cliente, alias_cliente, especificaciones } = body;
+  const { local_id, items, horario_retiro, nombre_cliente, telefono_cliente, alias_cliente, email_cliente, especificaciones } = body;
 
   if (!local_id || !Array.isArray(items) || items.length === 0 || !horario_retiro) {
     return NextResponse.json({ error: "Faltan datos del pedido." }, { status: 400 });
@@ -82,6 +83,7 @@ export async function POST(req: Request) {
     nombre_cliente: nombre_cliente ?? null,
     telefono_cliente: telefono_cliente ?? null,
     alias_cliente: alias_cliente ?? null,
+    email_cliente: email_cliente ?? null,
     especificaciones: especificaciones ?? null,
   });
   if (insErr) return NextResponse.json({ error: insErr.message }, { status: 500 });

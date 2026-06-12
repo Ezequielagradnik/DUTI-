@@ -37,10 +37,10 @@ export default async function MisPedidos() {
 
       {pedidos.length === 0 ? (
         <div className="mt-8 rounded-card border border-dashed border-brdr bg-white p-10 text-center">
-          <p className="text-muted">Todavía no hiciste ningún pedido.</p>
-          <Link href="/locales" className="mt-4 inline-block rounded-full bg-navy px-6 py-3 font-semibold text-cream hover:bg-navy-700">
-            Ver locales
-          </Link>
+          <p className="text-muted">
+            Todavía no hiciste ningún pedido. Entrá al link de tu local favorito
+            para hacer el primero.
+          </p>
         </div>
       ) : (
         <div className="mt-6 space-y-3">

@@ -61,8 +61,8 @@ export default async function LocalPage({
 
       {/* Menú */}
       <div className="mx-auto max-w-4xl px-4 py-8">
-        <Link href="/locales" className="text-sm text-muted hover:text-copper">
-          ← Volver a locales
+        <Link href="/" className="text-sm text-muted hover:text-copper">
+          ← DUTI
         </Link>
 
         {platos.length === 0 ? (

@@ -2,19 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { useCart } from "@/lib/cart";
 import { formatARS } from "@/lib/format";
-import type { Local, Slot } from "@/lib/types";
+import { HoraPicker, horaInicial } from "@/components/hora-picker";
+import type { Local } from "@/lib/types";
 
 export default function CarritoPage() {
   const { items, localId, subtotal, count, setCantidad, remove, clear } = useCart();
   const router = useRouter();
 
   const [local, setLocal] = useState<Local | null>(null);
-  const [slots, setSlots] = useState<Slot[]>([]);
-  const [slot, setSlot] = useState<string>("");
+  const [hora, setHora] = useState<string>("");
   const [alias, setAlias] = useState("");
+  const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
   const [especificaciones, setEspecificaciones] = useState("");
   const [loading, setLoading] = useState(false);
@@ -26,15 +26,24 @@ export default function CarritoPage() {
       .then((r) => r.json())
       .then((d) => {
         setLocal(d.local);
-        setSlots(d.slots ?? []);
+        if (d.local) {
+          setHora(
+            horaInicial(
+              d.local.tiempo_estimado_min,
+              d.local.horario_apertura,
+              d.local.horario_cierre
+            )
+          );
+        }
       })
       .catch(() => {});
   }, [localId]);
 
   async function pagar() {
     setError(null);
-    if (!slot) return setError("Elegí un horario de retiro.");
+    if (!hora) return setError("Elegí un horario de retiro.");
     if (!alias.trim()) return setError("Ingresá el alias desde el que vas a transferir.");
+    if (!email.trim() || !email.includes("@")) return setError("Ingresá un email válido.");
     setLoading(true);
     try {
       const res = await fetch("/api/pedidos", {
@@ -49,8 +58,9 @@ export default function CarritoPage() {
             cantidad: i.cantidad,
           })),
           subtotal,
-          horario_retiro: slot,
+          horario_retiro: hora,
           alias_cliente: alias.trim(),
+          email_cliente: email.trim(),
           telefono_cliente: telefono.trim() || null,
           especificaciones: especificaciones.trim() || null,
         }),
@@ -68,13 +78,9 @@ export default function CarritoPage() {
     return (
       <div className="mx-auto max-w-2xl px-4 py-20 text-center">
         <h1 className="text-2xl font-bold text-navy">Tu carrito está vacío</h1>
-        <p className="mt-2 text-muted">Sumá platos desde un local para empezar.</p>
-        <Link
-          href="/locales"
-          className="mt-6 inline-block rounded-full bg-navy px-6 py-3 font-semibold text-cream hover:bg-navy-700"
-        >
-          Ver locales
-        </Link>
+        <p className="mt-2 text-muted">
+          Entrá al link de tu local favorito y sumá platos para empezar.
+        </p>
       </div>
     );
   }
@@ -133,56 +139,66 @@ export default function CarritoPage() {
         ))}
       </div>
 
-      {/* Horario */}
+      {/* Horario de retiro (reloj tipo alarma, de 5 en 5) */}
       <div className="mt-8">
-        <h2 className="font-semibold text-navy">Horario de retiro</h2>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {slots.length === 0 && (
+        <h2 className="font-semibold text-navy">¿A qué hora lo pasás a buscar?</h2>
+        <div className="mt-3 flex justify-center sm:justify-start">
+          {hora ? (
+            <HoraPicker
+              value={hora}
+              onChange={setHora}
+              apertura={local?.horario_apertura ?? null}
+              cierre={local?.horario_cierre ?? null}
+            />
+          ) : (
             <p className="text-sm text-muted">Cargando horarios…</p>
           )}
-          {slots.map((s) => {
-            const lleno = s.ocupados >= s.capacidad_max;
-            const sel = slot === s.hora.slice(0, 5);
-            return (
-              <button
-                key={s.id}
-                disabled={lleno}
-                onClick={() => setSlot(s.hora.slice(0, 5))}
-                className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                  sel
-                    ? "border-navy bg-navy text-cream"
-                    : lleno
-                      ? "cursor-not-allowed border-brdr text-muted/50 line-through"
-                      : "border-brdr bg-white text-navy hover:border-navy"
-                }`}
-              >
-                {s.hora.slice(0, 5)}
-              </button>
-            );
-          })}
         </div>
       </div>
 
       {/* Datos */}
-      <div className="mt-8 grid gap-3 sm:grid-cols-2">
-        <input
-          value={alias}
-          onChange={(e) => setAlias(e.target.value)}
-          placeholder="Tu alias de MP (desde donde transferís) *"
-          className="rounded-xl border border-brdr bg-white px-4 py-3 outline-none focus:border-navy"
-        />
-        <input
-          value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
-          placeholder="Teléfono (opcional)"
-          className="rounded-xl border border-brdr bg-white px-4 py-3 outline-none focus:border-navy"
-        />
+      <div className="mt-8 space-y-3">
+        <div>
+          <input
+            value={alias}
+            onChange={(e) => setAlias(e.target.value)}
+            placeholder="Tu alias de Mercado Pago *"
+            className="w-full rounded-xl border border-brdr bg-white px-4 py-3 outline-none focus:border-navy"
+          />
+          <p className="mt-1 px-1 text-xs text-muted">
+            El alias de <strong>tu</strong> cuenta (desde donde vas a transferir).
+            Lo usamos para verificar que el pago sea tuyo.
+          </p>
+        </div>
+        <div>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            placeholder="Tu email *"
+            className="w-full rounded-xl border border-brdr bg-white px-4 py-3 outline-none focus:border-navy"
+          />
+          <p className="mt-1 px-1 text-xs text-muted">
+            Te mandamos la confirmación y te avisamos cuando tu pedido esté listo.
+          </p>
+        </div>
+        <div>
+          <input
+            value={telefono}
+            onChange={(e) => setTelefono(e.target.value)}
+            placeholder="Teléfono (opcional)"
+            className="w-full rounded-xl border border-brdr bg-white px-4 py-3 outline-none focus:border-navy"
+          />
+          <p className="mt-1 px-1 text-xs text-muted">
+            Opcional: por si el local necesita contactarte por tu pedido.
+          </p>
+        </div>
         <textarea
           value={especificaciones}
           onChange={(e) => setEspecificaciones(e.target.value)}
           placeholder="Aclaraciones para el local (ej. sin cebolla, bien cocido…)"
           rows={2}
-          className="rounded-xl border border-brdr bg-white px-4 py-3 outline-none focus:border-navy sm:col-span-2"
+          className="w-full rounded-xl border border-brdr bg-white px-4 py-3 outline-none focus:border-navy"
         />
       </div>
 

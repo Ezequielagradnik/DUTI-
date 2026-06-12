@@ -135,6 +135,7 @@ create table if not exists pedidos (
   nombre_cliente    text,
   telefono_cliente  text,
   alias_cliente     text,                      -- alias desde el que transfiere el cliente
+  email_cliente     text,                      -- confirmación + aviso de pedido listo
   created_at        timestamptz not null default now(),
   updated_at        timestamptz not null default now()
 );

@@ -108,10 +108,10 @@ export default function ComoFunciona() {
             Mirá los locales y hacé tu primer pedido en un par de minutos.
           </p>
           <Link
-            href="/locales"
+            href="/sumate"
             className="mt-7 inline-block rounded-full bg-copper px-8 py-3.5 font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-copper-light"
           >
-            Ver locales
+            Sumá tu local
           </Link>
         </div>
       </section>

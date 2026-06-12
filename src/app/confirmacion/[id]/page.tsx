@@ -62,10 +62,10 @@ export default async function ConfirmacionPage({
       </div>
 
       <Link
-        href="/locales"
+        href="/mis-pedidos"
         className="mt-6 block rounded-full bg-navy py-3 text-center font-semibold text-cream hover:bg-navy-700"
       >
-        Volver a locales
+        Ver mis pedidos
       </Link>
     </div>
   );

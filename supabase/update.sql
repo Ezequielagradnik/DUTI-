@@ -265,3 +265,9 @@ update locales set zona = 'Caballito', rango_precio = 2 where slug = 'napoli-piz
 alter table pedidos
   add column if not exists alias_cliente text;
 
+-- ============================================================
+-- DUTI — Email del cliente (confirmación + aviso de pedido listo)
+-- ============================================================
+alter table pedidos
+  add column if not exists email_cliente text;
+

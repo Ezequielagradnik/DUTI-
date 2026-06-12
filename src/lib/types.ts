@@ -85,6 +85,7 @@ export interface Pedido {
   nombre_cliente: string | null;
   telefono_cliente: string | null;
   alias_cliente: string | null; // alias desde el que transfiere
+  email_cliente: string | null; // para confirmación y aviso de "pedido listo"
   created_at: string;
 }
 

@@ -135,6 +135,7 @@ create table if not exists pedidos (
   nombre_cliente    text,
   telefono_cliente  text,
   alias_cliente     text,                      -- alias desde el que transfiere el cliente
+  email_cliente     text,                      -- confirmación + aviso de pedido listo
   created_at        timestamptz not null default now(),
   updated_at        timestamptz not null default now()
 );
@@ -612,6 +613,11 @@ update locales set zona = 'Caballito', rango_precio = 2 where slug = 'napoli-piz
 -- ============================================================
 alter table pedidos
   add column if not exists alias_cliente text;
+-- ============================================================
+-- DUTI — Email del cliente (confirmación + aviso de pedido listo)
+-- ============================================================
+alter table pedidos
+  add column if not exists email_cliente text;
 -- ============================================================
 -- DUTI — Seed data (locales y platos de demo)
 -- Idempotente: se puede correr varias veces.

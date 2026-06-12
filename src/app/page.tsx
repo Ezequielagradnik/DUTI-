@@ -32,12 +32,12 @@ export default function Home() {
                 exacta para pasar a buscarlo.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Link href="/locales" className="group rounded-full bg-navy px-7 py-3.5 font-semibold text-cream shadow-lg shadow-navy/25 transition hover:-translate-y-0.5 hover:bg-navy-700 hover:shadow-xl">
-                  Ver locales
+                <Link href="/como-funciona" className="group rounded-full bg-navy px-7 py-3.5 font-semibold text-cream shadow-lg shadow-navy/25 transition hover:-translate-y-0.5 hover:bg-navy-700 hover:shadow-xl">
+                  Cómo funciona
                   <span className="ml-2 inline-block transition group-hover:translate-x-1">→</span>
                 </Link>
-                <Link href="/como-funciona" className="rounded-full border border-navy/15 bg-white/60 px-7 py-3.5 font-semibold text-navy backdrop-blur transition hover:bg-white">
-                  Cómo funciona
+                <Link href="/sumate" className="rounded-full border border-navy/15 bg-white/60 px-7 py-3.5 font-semibold text-navy backdrop-blur transition hover:bg-white">
+                  Sumá tu local
                 </Link>
               </div>
             </div>
@@ -49,6 +49,31 @@ export default function Home() {
         </section>
       </div>
 
+      {/* Propósito */}
+      <section className="mx-auto max-w-6xl px-4 pt-16">
+        <span className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-copper">
+          Qué hace DUTI
+        </span>
+        <div className="mt-6 grid gap-5 md:grid-cols-3">
+          {[
+            ["⏱️", "Reducimos tu fila", "Tus clientes piden y pagan antes de llegar. Nadie espera en el mostrador."],
+            ["🍳", "Optimizamos tu cocina", "Los pedidos entran ordenados por horario de retiro. La cocina sabe qué marchar y cuándo."],
+            ["🤖", "Gestionamos tus pedidos con IA", "Cada pago se verifica solo, al instante. Sin chequear comprobantes a mano."],
+          ].map(([icon, t, d]) => (
+            <div
+              key={t}
+              className="group rounded-card border border-brdr bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:border-copper/40 hover:shadow-md"
+            >
+              <span className="grid h-12 w-12 place-items-center rounded-2xl bg-navy-50 text-2xl transition group-hover:scale-110">
+                {icon}
+              </span>
+              <h3 className="mt-5 text-xl font-bold tracking-tight text-navy">{t}</h3>
+              <p className="mt-2 text-sm text-muted">{d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* El recorrido (teléfono sticky + pasos) */}
       <Recorrido />
 
@@ -59,12 +84,13 @@ export default function Home() {
       <section className="mx-auto max-w-6xl px-4 py-12">
         <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-navy to-navy-700 px-8 py-14 text-center text-cream">
           <div className="animate-blob absolute -right-10 -top-10 h-60 w-60 rounded-full bg-copper/30 blur-3xl" />
-          <h2 className="relative text-3xl font-bold">¿Listo para pedir?</h2>
+          <h2 className="relative text-3xl font-bold">¿Tenés un local?</h2>
           <p className="relative mx-auto mt-3 max-w-md text-cream/70">
-            Explorá los locales disponibles y armá tu pedido en minutos.
+            Sumate a DUTI: cobrá el 100% por transferencia y dejá que la IA
+            verifique los pagos por vos.
           </p>
-          <Link href="/locales" className="relative mt-7 inline-block rounded-full bg-copper px-8 py-3.5 font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-copper-light">
-            Ver locales
+          <Link href="/sumate" className="relative mt-7 inline-block rounded-full bg-copper px-8 py-3.5 font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-copper-light">
+            Sumá tu local
           </Link>
         </div>
       </section>
