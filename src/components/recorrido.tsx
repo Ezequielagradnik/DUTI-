@@ -41,9 +41,9 @@ export function Recorrido() {
       </p>
 
       <div className="mt-12 grid gap-14 md:grid-cols-[0.85fr_1fr]">
-        {/* Teléfono sticky */}
-        <div className="md:sticky md:top-24 md:h-fit">
-          <div className="relative mx-auto aspect-[9/16.5] w-full max-w-[320px] rounded-[34px] border border-brdr bg-navy p-3.5 shadow-2xl">
+        {/* Teléfono sticky (también en mobile, más chico) */}
+        <div className="sticky top-20 z-10 mb-8 self-start md:top-24 md:mb-0">
+          <div className="relative mx-auto aspect-[9/16.5] w-full max-w-[200px] rounded-[28px] border border-brdr bg-navy p-3 shadow-2xl md:max-w-[320px] md:rounded-[34px] md:p-3.5">
             <div className="relative h-full overflow-hidden rounded-[24px] bg-cream">
               {/* Pantalla 1: menú */}
               <Screen on={active === 1}>
