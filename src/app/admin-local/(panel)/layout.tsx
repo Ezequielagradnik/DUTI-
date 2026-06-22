@@ -7,6 +7,7 @@ import { logout } from "../login/actions";
 const NAV = [
   { href: "/admin-local", label: "Resumen", icon: "📊" },
   { href: "/admin-local/pedidos", label: "Pedidos", icon: "🧾" },
+  { href: "/admin-local/menu", label: "Menú", icon: "🍔" },
   { href: "/admin-local/ventas", label: "Ventas", icon: "💰" },
 ];
 
