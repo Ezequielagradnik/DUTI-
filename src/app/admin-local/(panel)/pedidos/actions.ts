@@ -45,7 +45,12 @@ async function notificarPorMail(pedidoId: string, estado: "listo" | "confirmado"
 
     const mail =
       estado === "listo"
-        ? mailPedidoListo({ local: nombreLocal, horario: ped.horario_retiro, direccion: local?.direccion })
+        ? mailPedidoListo({
+            local: nombreLocal,
+            horario: ped.horario_retiro,
+            direccion: local?.direccion,
+            codigo: pedidoId.slice(0, 8),
+          })
         : mailPagoConfirmado({ local: nombreLocal, horario: ped.horario_retiro });
 
     await enviarMail({ to: ped.email_cliente, ...mail });

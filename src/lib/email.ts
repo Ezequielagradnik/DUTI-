@@ -41,16 +41,25 @@ function layout(titulo: string, cuerpo: string): string {
 export function mailPedidoListo(o: {
   local: string;
   horario: string;
+  codigo: string;
   direccion?: string | null;
 }): { subject: string; html: string } {
+  const maps = o.direccion
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.direccion)}`
+    : null;
   return {
     subject: `🎉 Tu pedido en ${o.local} está listo`,
     html: layout(
       "¡Tu pedido está listo! 🎉",
       `<p style="font-size:15px;color:#6b7785">Ya podés pasar a buscarlo por <strong style="color:#15304f">${o.local}</strong>.</p>
+       <div style="margin-top:18px;border:1px dashed #bd7b54;background:#f6ece4;border-radius:12px;padding:14px 18px;text-align:center">
+         <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#6b7785">Código de retiro</div>
+         <div style="font-family:monospace;font-size:24px;font-weight:700;color:#bd7b54">#${o.codigo}</div>
+       </div>
        <p style="margin-top:16px;font-size:15px">🕒 Horario de retiro: <strong>${o.horario}</strong></p>
        ${o.direccion ? `<p style="font-size:15px">📍 ${o.direccion}</p>` : ""}
-       <p style="margin-top:20px;font-size:13px;color:#6b7785">Mostrá este mail en el mostrador. ¡Buen provecho!</p>`
+       ${maps ? `<p style="margin-top:14px"><a href="${maps}" style="display:inline-block;background:#15304f;color:#faf8f5;text-decoration:none;padding:11px 20px;border-radius:999px;font-weight:600;font-size:14px">Cómo llegar →</a></p>` : ""}
+       <p style="margin-top:20px;font-size:13px;color:#6b7785">Mostrá este código en el mostrador. ¡Buen provecho!</p>`
     ),
   };
 }
