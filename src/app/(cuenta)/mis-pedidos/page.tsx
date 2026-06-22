@@ -5,6 +5,7 @@ import { getSession } from "@/lib/auth";
 import { formatARS } from "@/lib/format";
 import { EstadoBadge } from "@/components/estado-badge";
 import { PedidoEditable } from "@/components/pedido-editable";
+import { PedidosRealtime } from "@/components/pedidos-realtime";
 import { logoutCliente } from "../actions";
 import type { ItemPedido, Pedido } from "@/lib/types";
 
@@ -23,8 +24,22 @@ export default async function MisPedidos() {
     .order("created_at", { ascending: false });
   const pedidos = (data ?? []) as Pedido[];
 
+  const hayListo = pedidos.some((p) => p.estado === "listo");
+
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
+      <PedidosRealtime userId={session.userId} />
+
+      {hayListo && (
+        <div className="mb-6 flex items-center gap-3 rounded-card border border-success/30 bg-success/10 px-5 py-4">
+          <span className="text-2xl">🎉</span>
+          <div>
+            <p className="font-bold text-navy">¡Tenés un pedido listo!</p>
+            <p className="text-sm text-muted">Pasá a buscarlo por el local.</p>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-navy">Mis pedidos</h1>
@@ -50,11 +65,16 @@ export default async function MisPedidos() {
               return <PedidoEditable key={p.id} pedido={p} />;
             }
             const items = (p.items ?? []) as ItemPedido[];
+            const listo = p.estado === "listo";
             return (
               <Link
                 key={p.id}
                 href={`/confirmacion/${p.id}`}
-                className="block rounded-card border border-brdr bg-white p-4 hover:border-navy"
+                className={`block rounded-card border p-4 transition ${
+                  listo
+                    ? "border-success/40 bg-success/5 hover:border-success"
+                    : "border-brdr bg-white hover:border-navy"
+                }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -63,10 +83,17 @@ export default async function MisPedidos() {
                   </div>
                   <span className="font-bold text-navy">{formatARS(Number(p.total))}</span>
                 </div>
+                {listo && (
+                  <p className="mt-2 font-semibold text-success">
+                    🎉 ¡Listo! Pasá a buscarlo (retiro {p.horario_retiro})
+                  </p>
+                )}
                 <p className="mt-2 text-sm text-muted">
                   {items.map((i) => `${i.cantidad}× ${i.nombre}`).join(" · ")}
                 </p>
-                <p className="mt-1 text-xs text-muted">Retiro {p.horario_retiro}</p>
+                {!listo && (
+                  <p className="mt-1 text-xs text-muted">Retiro {p.horario_retiro}</p>
+                )}
               </Link>
             );
           })}

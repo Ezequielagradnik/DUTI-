@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPedidoById, getLocalById } from "@/lib/data";
 import { formatARS } from "@/lib/format";
+import { PedidosRealtime } from "@/components/pedidos-realtime";
 import type { ItemPedido } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -17,22 +18,36 @@ export default async function ConfirmacionPage({
   const local = await getLocalById(pedido.local_id);
   const items = (pedido.items ?? []) as ItemPedido[];
 
-  const confirmado = pedido.estado === "confirmado" || pedido.estado === "en_preparacion" || pedido.estado === "listo";
+  const listo = pedido.estado === "listo";
+  const confirmado = pedido.estado === "confirmado" || pedido.estado === "en_preparacion";
+
+  const icono = listo ? "🎉" : confirmado ? "✅" : "🕒";
+  const titulo = listo
+    ? "¡Tu pedido está listo!"
+    : confirmado
+      ? "¡Pago confirmado!"
+      : "Pedido recibido";
+  const bajada = listo
+    ? `Pasá a buscarlo por ${local?.nombre ?? "el local"}.`
+    : confirmado
+      ? "Tu pedido ya está en la cocina."
+      : "Estamos terminando de verificar tu pago.";
 
   return (
     <div className="mx-auto max-w-xl px-4 py-12">
-      <div className="rounded-card border border-brdr bg-white p-6 text-center">
+      {/* Actualiza esta página en vivo cuando el local marca "listo" */}
+      <PedidosRealtime pedidoId={pedido.id} />
+
+      <div
+        className={`rounded-card border p-6 text-center ${
+          listo ? "border-success/40 bg-success/5" : "border-brdr bg-white"
+        }`}
+      >
         <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-success/10 text-3xl">
-          {confirmado ? "✅" : "🕒"}
+          {icono}
         </div>
-        <h1 className="mt-4 text-2xl font-bold text-navy">
-          {confirmado ? "¡Pago confirmado!" : "Pedido recibido"}
-        </h1>
-        <p className="mt-1 text-muted">
-          {confirmado
-            ? "Tu pedido ya está en la cocina."
-            : "Estamos terminando de verificar tu pago."}
-        </p>
+        <h1 className="mt-4 text-2xl font-bold text-navy">{titulo}</h1>
+        <p className="mt-1 text-muted">{bajada}</p>
         <p className="mt-2 font-mono text-xs text-muted">#{pedido.id.slice(0, 8)}</p>
       </div>
 
