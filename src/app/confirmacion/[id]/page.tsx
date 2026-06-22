@@ -48,7 +48,12 @@ export default async function ConfirmacionPage({
         </div>
         <h1 className="mt-4 text-2xl font-bold text-navy">{titulo}</h1>
         <p className="mt-1 text-muted">{bajada}</p>
-        <p className="mt-2 font-mono text-xs text-muted">#{pedido.id.slice(0, 8)}</p>
+
+        <div className="mx-auto mt-5 inline-block rounded-xl border border-dashed border-copper/50 bg-copper-50/60 px-6 py-3">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted">Código de retiro</p>
+          <p className="font-mono text-2xl font-bold text-copper">#{pedido.id.slice(0, 8)}</p>
+        </div>
+        <p className="mt-2 text-xs text-muted">Mostrá este código al pasar a buscar tu pedido.</p>
       </div>
 
       <div className="mt-6 rounded-card border border-brdr bg-white p-5">
@@ -74,6 +79,27 @@ export default async function ConfirmacionPage({
           <span>Total</span>
           <span>{formatARS(Number(pedido.total))}</span>
         </div>
+
+        {local?.direccion && (
+          <div className="mt-4 border-t border-brdr pt-4">
+            <p className="text-sm font-semibold text-navy">📍 {local.direccion}</p>
+            <iframe
+              title={`Ubicación de ${local.nombre}`}
+              className="mt-3 h-48 w-full rounded-xl border border-brdr"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              src={`https://www.google.com/maps?q=${encodeURIComponent(local.direccion)}&output=embed`}
+            />
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(local.direccion)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-block text-sm font-semibold text-copper hover:underline"
+            >
+              Cómo llegar →
+            </a>
+          </div>
+        )}
       </div>
 
       <Link
