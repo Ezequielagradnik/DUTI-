@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { formatARS } from "@/lib/format";
 import { guardarPlato, togglePlato, borrarPlato, type PlatoInput } from "@/app/admin-local/(panel)/menu/actions";
+import { ImportarPlatos } from "@/components/importar-platos";
 import type { Plato } from "@/lib/types";
 
 const VACIO: PlatoInput = {
@@ -84,7 +85,8 @@ export function MenuManager({ platosIniciales }: { platosIniciales: Plato[] }) {
 
   return (
     <div>
-      <div className="mb-5 flex justify-end">
+      <div className="mb-5 flex flex-wrap justify-end gap-2">
+        <ImportarPlatos />
         <button
           onClick={abrirNuevo}
           className="rounded-full bg-copper px-5 py-2.5 text-sm font-semibold text-white hover:bg-copper-light"

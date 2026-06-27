@@ -66,3 +66,37 @@ export async function borrarPlato(id: string) {
   revalidatePath("/admin-local/menu");
   return { ok: true };
 }
+
+export interface PlatoBulk {
+  nombre: string;
+  precio: number;
+  descripcion?: string;
+  categoria?: string;
+  disponible?: boolean;
+}
+
+export async function importarPlatos(platos: PlatoBulk[]) {
+  const supabase = await createClient();
+  if (!supabase) return { error: "No configurado" };
+  const localId = await localIdDelOwner();
+  if (!localId) return { error: "Tu cuenta no está vinculada a un local." };
+
+  const filas = (platos || [])
+    .filter((p) => p && p.nombre?.trim() && Number.isFinite(p.precio) && p.precio >= 0)
+    .map((p) => ({
+      local_id: localId,
+      nombre: p.nombre.trim(),
+      precio: p.precio,
+      descripcion: p.descripcion?.trim() || null,
+      categoria: p.categoria?.trim() || null,
+      disponible: p.disponible ?? true,
+    }));
+
+  if (filas.length === 0) return { error: "No hay filas válidas para importar." };
+
+  // RLS (platos_write_owner) garantiza que se carguen solo en el local del dueño.
+  const { error } = await supabase.from("platos").insert(filas);
+  if (error) return { error: error.message };
+  revalidatePath("/admin-local/menu");
+  return { ok: true, count: filas.length };
+}
