@@ -32,7 +32,6 @@ export function Header({
         </Link>
 
         <nav className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-6 text-sm font-medium text-navy/80 md:flex">
-          <Link href="/locales" className="hover:text-copper">Locales</Link>
           <Link href="/como-funciona" className="hover:text-copper">Cómo funciona</Link>
           <Link href="/sumate" className="hover:text-copper">Sumá tu local</Link>
           {panel && (
