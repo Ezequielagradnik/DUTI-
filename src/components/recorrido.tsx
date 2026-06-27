@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const STEPS = [
-  { n: "01", titulo: "Elegí tu local", desc: "Mirás los locales disponibles cerca tuyo y armás el pedido desde el menú, sin apuro." },
+  { n: "01", titulo: "Entrá al link de tu local", desc: "Tu restaurante comparte su link de DUTI en sus redes. Tocás ahí y se abre su menú, sin apps ni búsquedas." },
   { n: "02", titulo: "Pagás por transferencia", desc: "Te mostramos el alias y el monto exacto. Transferís y subís el comprobante. Listo." },
   { n: "03", titulo: "La IA verifica al toque", desc: "Nuestra IA lee el comprobante y valida el pago en segundos. Nadie confirma nada a mano." },
   { n: "04", titulo: "Retirás a tu horario", desc: "Elegís la franja y la cocina lo tiene listo a esa hora. Llegás, lo agarrás y te vas." },

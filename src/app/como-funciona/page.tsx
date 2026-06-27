@@ -4,9 +4,9 @@ export const metadata = { title: "Cómo funciona — DUTI" };
 
 const PASOS = [
   {
-    icon: "🍔",
-    titulo: "Elegí tu local",
-    desc: "Explorá los locales disponibles y mirá su menú con fotos y precios reales.",
+    icon: "🔗",
+    titulo: "Entrá al link de tu local",
+    desc: "Tu restaurante comparte su link de DUTI en sus redes (bio de Instagram, historia, web). Tocás ahí y se abre su menú al instante.",
   },
   {
     icon: "🛒",
