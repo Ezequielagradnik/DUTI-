@@ -16,11 +16,29 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://duti.com.ar";
+const TITULO = "DUTI — Pedí tu comida, retirá a horario";
+const DESC =
+  "Pedí en tus locales favoritos, pagá por transferencia y retirá en el horario que elijas. Verificación de pago automática.";
+
 export const metadata: Metadata = {
-  title: "DUTI — Pedí tu comida, retirá a horario",
-  description:
-    "Pedí en tus locales favoritos, pagá por transferencia y retirá en el horario que elijas. Verificación de pago automática.",
+  metadataBase: new URL(APP_URL),
+  title: TITULO,
+  description: DESC,
   icons: { icon: "/icon.svg" },
+  openGraph: {
+    title: TITULO,
+    description: DESC,
+    url: "/",
+    siteName: "DUTI",
+    locale: "es_AR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITULO,
+    description: DESC,
+  },
 };
 
 export default async function RootLayout({
