@@ -32,12 +32,12 @@ export default function Home() {
                 exacta para pasar a buscarlo.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Link href="/locales" className="group rounded-full bg-navy px-7 py-3.5 font-semibold text-cream shadow-lg shadow-navy/25 transition hover:-translate-y-0.5 hover:bg-navy-700 hover:shadow-xl">
-                  Ver locales
+                <Link href="/como-funciona" className="group rounded-full bg-navy px-7 py-3.5 font-semibold text-cream shadow-lg shadow-navy/25 transition hover:-translate-y-0.5 hover:bg-navy-700 hover:shadow-xl">
+                  Cómo funciona
                   <span className="ml-2 inline-block transition group-hover:translate-x-1">→</span>
                 </Link>
-                <Link href="/como-funciona" className="rounded-full border border-navy/15 bg-white/60 px-7 py-3.5 font-semibold text-navy backdrop-blur transition hover:bg-white">
-                  Cómo funciona
+                <Link href="/sumate" className="rounded-full border border-navy/15 bg-white/60 px-7 py-3.5 font-semibold text-navy backdrop-blur transition hover:bg-white">
+                  Sumá tu local
                 </Link>
               </div>
             </div>

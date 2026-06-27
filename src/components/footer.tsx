@@ -17,7 +17,6 @@ export function Footer() {
         <div>
           <h4 className="mb-3 text-sm font-semibold text-copper-light">Plataforma</h4>
           <ul className="space-y-2 text-sm text-cream/70">
-            <li><Link href="/locales" className="hover:text-cream">Locales</Link></li>
             <li><Link href="/como-funciona" className="hover:text-cream">Cómo funciona</Link></li>
             <li><Link href="/sumate" className="hover:text-cream">Sumá tu local</Link></li>
             <li><Link href="/admin-local" className="hover:text-cream">Panel del local</Link></li>
