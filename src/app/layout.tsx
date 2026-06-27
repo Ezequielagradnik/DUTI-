@@ -25,7 +25,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: TITULO,
   description: DESC,
-  icons: { icon: "/icon.svg" },
   openGraph: {
     title: TITULO,
     description: DESC,
